@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontak - Evan Fadhluradha Aurora</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="logo gradient-text">E.F.A</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Beranda</a></li>
+                <li><a href="index.html#about" class="nav-link">Tentang</a></li>
+                <li><a href="index.html#projects" class="nav-link">Proyek</a></li>
+                <li><a href="contact.html" class="nav-link active">Kontak</a></li>
+            </ul>
+            <ul class="social-menu">
+                <li><a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="#" class="social-link"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="#" class="social-link"><i class="fab fa-linkedin"></i></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="contact-page">
+        <div class="contact-container">
+            <h1 class="contact-title">Hubungi Saya</h1>
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <h2>Informasi Kontak</h2>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h3>Telepon</h3>
+                            <p>+62 123 4567 890</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h3>Email</h3>
+                            <p>evan@email.com</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h3>Lokasi</h3>
+                            <p>Semarang, Indonesia</p>
+                        </div>
+                    </div>
+                    <div class="contact-social">
+                        <a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h2>Kirim Pesan</h2>
+                    <form id="whatsappForm" onsubmit="sendToWhatsApp(event)">
+                        <div class="form-group">
+                            <label for="name">Nama Lengkap</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="service">Layanan</label>
+                            <select id="service" name="service" required>
+                                <option value="">Pilih Layanan</option>
+                                <option value="web">Web Development</option>
+                                <option value="translation">Penerjemahan</option>
+                                <option value="management">Manajemen Proyek</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Pesan</label>
+                            <textarea id="message" name="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <i class="fab fa-whatsapp"></i> Kirim via WhatsApp
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // WhatsApp form submission
+        function sendToWhatsApp(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const service = document.getElementById('service').value;
+            const message = document.getElementById('message').value;
+            
+            const serviceText = {
+                'web': 'Web Development',
+                'translation': 'Penerjemahan',
+                'management': 'Manajemen Proyek'
+            }[service];
+
+            const text = `Halo, saya ${name}!%0A%0A` +
+                        `Email: ${email}%0A` +
+                        `Layanan: ${serviceText}%0A%0A` +
+                        `Pesan: ${message}`
