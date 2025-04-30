@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testimoni Klien - Evan Fadhluradha Aurora</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .testimonials-container {
+            padding: 120px 2rem 4rem;
+            background-color: #f8f9fa;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            color: #333;
+            line-height: 1.6;
+            font-size: 1.1rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .testimonial-content::before {
+            content: '"';
+            position: absolute;
+            left: 0;
+            top: -0.5rem;
+            font-size: 3rem;
+            color: #0066cc;
+            opacity: 0.2;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: #0066cc;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .testimonial-author i {
+            color: #0066cc;
+            font-size: 1.2rem;
+        }
+
+        .delete-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .delete-button:hover {
+            background: #c82333;
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #0066cc;
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: #0066cc;
+        }
+
+        .testimonials-section {
+            margin-bottom: 4rem;
+        }
+
+        .add-testimonial-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 4rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-button {
+            background: #0066cc;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background: #0052a3;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="logo gradient-text">E.F.A</a>
+            <ul class="nav-menu">
+                <li><a href="index.html#home" class="nav-link">Beranda</a></li>
+                <li><a href="index.html#about" class="nav-link">Tentang</a></li>
+                <li><a href="projects.html" class="nav-link">Proyek</a></li>
+                <li><a href="testimonials.html" class="nav-link">Testimoni</a></li>
+                <li><a href="contact.html" class="nav-link">Kontak</a></li>
+            </ul>
+            <ul class="social-menu">
+                <li><a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="#" class="social-link"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="#" class="social-link"><i class="fab fa-linkedin"></i></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="testimonials-container">
+        <h1 class="section-title">Apa Kata Klien</h1>
+        
+        <div class="success-message" id="successMessage">
+            Testimoni berhasil ditambahkan!
+        </div>
+
+        <div class="add-testimonial-form">
+            <h2>Tambah Testimoni Baru</h2>
+            <form id="testimonialForm">
+                <div class="form-group">
+                    <label for="clientName">Nama Klien</label>
+                    <input type="text" id="clientName" required placeholder="Masukkan nama klien">
+                </div>
+                <div class="form-group">
+                    <label for="testimonialText">Testimoni</label>
+                    <textarea id="testimonialText" required placeholder="Masukkan testimoni dari klien"></textarea>
+                </div>
+                <button type="submit" class="submit-button">Tambah Testimoni</button>
+            </form>
+        </div>
+
+        <div class="testimonials-section">
+            <div class="testimonials-grid" id="testimonialsGrid">
+                <!-- Testimonials will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">Evan Fadhluradha Aurora</h3>
+                    <p class="footer-description">Mahasiswa Manajemen UNISSULA yang berfokus pada pengembangan web, penerjemahan, dan manajemen proyek.</p>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Kontak</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> evan@email.com</li>
+                        <li><i class="fas fa-phone"></i> +62 123 4567 890</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Semarang, Indonesia</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Media Sosial</h3>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Evan Fadhluradha Aurora. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM elements
+        const testimonialForm = document.getElementById('testimonialForm');
+        const testimonialsGrid = document.getElementById('testimonialsGrid');
+        const successMessage = document.getElementById('successMessage');
+
+        // Load testimonials from localStorage
+        function loadTestimonials() {
+            const testimonials = JSON.parse(localStorage.getItem('testimonials') || '[]');
+            testimonialsGrid.innerHTML = '';
+            
+            if (testimonials.length === 0) {
+                testimonialsGrid.innerHTML = `
+                    <div class="testimonial-card" style="grid-column: 1 / -1; text-align: center;">
+                        <p class="testimonial-content">Belum ada testimoni. Silakan tambahkan testimoni baru.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            testimonials.forEach((testimonial, index) => {
+                const card = document.createElement('div');
+                card.className = 'testimonial-card';
+                card.innerHTML = `
+                    <button class="delete-button" onclick="deleteTestimonial(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <p class="testimonial-content">${testimonial.text}</p>
+                    <p class="testimonial-author">
+                        <i class="fas fa-user"></i>
+                        ${testimonial.clientName}
+                    </p>
+                `;
+                testimonialsGrid.appendChild(card);
+            });
+        }
+
+        // Function to delete a testimonial
+        function deleteTestimonial(index) {
+            const testimonials = JSON.parse(localStorage.getItem('testimonials') || '[]');
+            testimonials.splice(index, 1);
+            localStorage.setItem('testimonials', JSON.stringify(testimonials));
+            loadTestimonials();
+            
+            // Show success message
+            successMessage.textContent = 'Testimoni berhasil dihapus!';
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Handle new testimonial submission
+        testimonialForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const clientName = document.getElementById('clientName').value;
+            const testimonialText = document.getElementById('testimonialText').value;
+
+            const testimonials = JSON.parse(localStorage.getItem('testimonials') || '[]');
+            testimonials.push({
+                clientName,
+                text: testimonialText
+            });
+
+            localStorage.setItem('testimonials', JSON.stringify(testimonials));
+            loadTestimonials();
+            testimonialForm.reset();
+
+            // Show success message
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        });
+
+        // Initial load of testimonials
+        loadTestimonials();
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html> 
