@@ -19,7 +19,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         .testimonial-card {
@@ -183,6 +183,37 @@
             margin-bottom: 1rem;
             display: none;
         }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .pagination-button {
+            background: #0066cc;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .pagination-button:hover {
+            background: #0052a3;
+        }
+
+        .pagination-button.active {
+            background: #004080;
+        }
+
+        .pagination-button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -230,6 +261,9 @@
             <div class="testimonials-grid" id="testimonialsGrid">
                 <!-- Testimonials will be loaded here -->
             </div>
+            <div class="pagination" id="pagination">
+                <!-- Pagination buttons will be added here -->
+            </div>
         </div>
     </div>
 
@@ -268,74 +302,176 @@
         const testimonialForm = document.getElementById('testimonialForm');
         const testimonialsGrid = document.getElementById('testimonialsGrid');
         const successMessage = document.getElementById('successMessage');
+        const pagination = document.getElementById('pagination');
 
-        // Load testimonials from localStorage
-        function loadTestimonials() {
-            const testimonials = JSON.parse(localStorage.getItem('testimonials') || '[]');
-            testimonialsGrid.innerHTML = '';
-            
-            if (testimonials.length === 0) {
+        // Pagination settings
+        const testimonialsPerPage = 6;
+        let currentPage = 1;
+        let totalPages = 1;
+
+        // API endpoint
+        const API_URL = 'api.php';
+
+        // Load testimonials from API
+        async function loadTestimonials() {
+            try {
+                const response = await fetch(`${API_URL}?page=${currentPage}&per_page=${testimonialsPerPage}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                testimonialsGrid.innerHTML = '';
+                totalPages = data.pagination.total_pages;
+
+                if (data.testimonials.length === 0) {
+                    testimonialsGrid.innerHTML = `
+                        <div class="testimonial-card" style="grid-column: 1 / -1; text-align: center;">
+                            <p class="testimonial-content">Belum ada testimoni. Silakan tambahkan testimoni baru.</p>
+                        </div>
+                    `;
+                    pagination.innerHTML = '';
+                    return;
+                }
+
+                // Display current page testimonials
+                data.testimonials.forEach(testimonial => {
+                    const card = document.createElement('div');
+                    card.className = 'testimonial-card';
+                    card.innerHTML = `
+                        <button class="delete-button" onclick="deleteTestimonial(${testimonial.id})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <p class="testimonial-content">${testimonial.text}</p>
+                        <p class="testimonial-author">
+                            <i class="fas fa-user"></i>
+                            ${testimonial.client_name}
+                        </p>
+                    `;
+                    testimonialsGrid.appendChild(card);
+                });
+
+                // Create pagination buttons
+                pagination.innerHTML = '';
+                
+                // Previous button
+                const prevButton = document.createElement('button');
+                prevButton.className = 'pagination-button';
+                prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                prevButton.disabled = currentPage === 1;
+                prevButton.onclick = () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        loadTestimonials();
+                    }
+                };
+                pagination.appendChild(prevButton);
+
+                // Page buttons
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+                    pageButton.textContent = i;
+                    pageButton.onclick = () => {
+                        currentPage = i;
+                        loadTestimonials();
+                    };
+                    pagination.appendChild(pageButton);
+                }
+
+                // Next button
+                const nextButton = document.createElement('button');
+                nextButton.className = 'pagination-button';
+                nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                nextButton.disabled = currentPage === totalPages;
+                nextButton.onclick = () => {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        loadTestimonials();
+                    }
+                };
+                pagination.appendChild(nextButton);
+            } catch (error) {
+                console.error('Error loading testimonials:', error);
                 testimonialsGrid.innerHTML = `
-                    <div class="testimonial-card" style="grid-column: 1 / -1; text-align: center;">
-                        <p class="testimonial-content">Belum ada testimoni. Silakan tambahkan testimoni baru.</p>
+                    <div class="testimonial-card" style="grid-column: 1 / -1; text-align: center; color: red;">
+                        <p class="testimonial-content">Error loading testimonials. Please try again later.</p>
                     </div>
                 `;
-                return;
             }
-            
-            testimonials.forEach((testimonial, index) => {
-                const card = document.createElement('div');
-                card.className = 'testimonial-card';
-                card.innerHTML = `
-                    <button class="delete-button" onclick="deleteTestimonial(${index})">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <p class="testimonial-content">${testimonial.text}</p>
-                    <p class="testimonial-author">
-                        <i class="fas fa-user"></i>
-                        ${testimonial.clientName}
-                    </p>
-                `;
-                testimonialsGrid.appendChild(card);
-            });
         }
 
         // Function to delete a testimonial
-        function deleteTestimonial(index) {
-            const testimonials = JSON.parse(localStorage.getItem('testimonials') || '[]');
-            testimonials.splice(index, 1);
-            localStorage.setItem('testimonials', JSON.stringify(testimonials));
-            loadTestimonials();
-            
-            // Show success message
-            successMessage.textContent = 'Testimoni berhasil dihapus!';
-            successMessage.style.display = 'block';
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 3000);
+        async function deleteTestimonial(id) {
+            try {
+                const response = await fetch(`${API_URL}?id=${id}`, {
+                    method: 'DELETE'
+                });
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                // Reset to first page if current page is empty
+                if (currentPage > totalPages) {
+                    currentPage = totalPages || 1;
+                }
+                
+                loadTestimonials();
+                
+                // Show success message
+                successMessage.textContent = 'Testimoni berhasil dihapus!';
+                successMessage.style.display = 'block';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+            } catch (error) {
+                console.error('Error deleting testimonial:', error);
+                alert('Failed to delete testimonial. Please try again.');
+            }
         }
 
         // Handle new testimonial submission
-        testimonialForm.addEventListener('submit', (e) => {
+        testimonialForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const clientName = document.getElementById('clientName').value;
             const testimonialText = document.getElementById('testimonialText').value;
 
-            const testimonials = JSON.parse(localStorage.getItem('testimonials') || '[]');
-            testimonials.push({
-                clientName,
-                text: testimonialText
-            });
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        clientName,
+                        text: testimonialText
+                    })
+                });
+                const data = await response.json();
 
-            localStorage.setItem('testimonials', JSON.stringify(testimonials));
-            loadTestimonials();
-            testimonialForm.reset();
+                if (data.error) {
+                    throw new Error(data.error);
+                }
 
-            // Show success message
-            successMessage.style.display = 'block';
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 3000);
+                // Go to last page after adding new testimonial
+                currentPage = totalPages;
+                
+                loadTestimonials();
+                testimonialForm.reset();
+
+                // Show success message
+                successMessage.textContent = 'Testimoni berhasil ditambahkan!';
+                successMessage.style.display = 'block';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+            } catch (error) {
+                console.error('Error adding testimonial:', error);
+                alert('Failed to add testimonial. Please try again.');
+            }
         });
 
         // Initial load of testimonials
